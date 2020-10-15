@@ -1,0 +1,92 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	Un peu plus sur le produit
+{% endblock %}
+{% block body %}
+	<div class="jumbotron bg-white">
+		<div class="container">
+			{# {% for message in app.flashes('success') %}
+							<div class="alert alert-success">
+								{{ message }}
+							</div>
+						{% endfor %}
+						{% if not form.vars.valid %}
+							<div class="alert alert-danger">
+								Je ne sais pas quoi
+							</div>
+						{% endif %} #}
+			<div class="row">
+				<div class="col-md-8">
+					{% for product in product.images %}
+						<img src="{{ asset('uploads/' ~ product.name ) }}" alt="image" style="width: 600px; height: 600px;">
+					{% endfor %}
+				</div>
+				<div class="col-md-4">
+					<h1 class="text-secondary">{{product.category.title}}
+						{{ product.mark }}</h1>
+					<div class="text-secondary" style="font-size: 2rem; font-weight: bold;">{{ product.price | number_format(0, '', ' ') }}Ar</div>
+                </div>
+			</div>
+		</div>
+	</div>
+	<div class="container mt-4">
+		<p>
+			{{ product.description | nl2br }}
+		</p>
+		<div class="row">
+			<div class="col-md-8">
+				<h2>Caractéristiques</h2>
+				<table class="table table-striped">
+					<tr>
+						<td>
+							<b>Nom</b>
+						</td>
+						<td>{{product.category.title }}</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Genre</b>
+						</td>
+						<td>
+							{% for sex in product.sex %}
+								{% if sex == "Masculin" %}
+									Masculin
+								{% elseif sex == "Masculin, Feminin" %}
+									Masculin, Feminin
+								{% else %}
+									Feminin
+								{% endif %}
+
+							{% endfor %}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Marque</b>
+						</td>
+						<td>{{ product.mark }}</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Couleur disponible</b>
+						</td>
+						<td>{{ product.color }}</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Taille disponible</b>
+						</td>
+						<td>{{ product.size }}</td>
+					</tr>
+					<tr>
+						<td>
+							<b>Prix</b>
+						</td>
+						<td>{{ product.price | number_format(0, '', ' ') }}
+							Ar</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}

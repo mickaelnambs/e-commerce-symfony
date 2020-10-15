@@ -1,0 +1,25 @@
+<div class="col-lg-4 col-md-6 mb-5">
+	<div class="product-item">
+		<figure>
+			{% for product in product.images %}
+				<img src="{{ asset('uploads/' ~ product.name ) }}" alt="Image" class="img-fluid" style="width: 350px; height: 400px;">
+			{% endfor %}
+		</figure>
+		<div class="px-4">
+			<h3>
+				<a href="{{ path('product_show', {slug: product.slug, id: product.id}) }}">{{ product.mark }}</a>
+			</h3>
+			<h4>{{ product.price | number_format(0, '', ' ') }}
+				Ar</h4>
+			<div>
+				{% if app.user %}
+					<a href="{{ path('product_cart_add', {id: product.id}) }}" add-to-cart class="btn btn-black mr-1 rounded-0">Ajouter</a>
+				{% endif %}
+				<a href="{{ path('product_show', {slug: product.slug, id: product.id}) }}" class="btn btn-black btn-outline-black ml-1 rounded-0">Voir</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+

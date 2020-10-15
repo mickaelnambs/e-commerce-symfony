@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Connexion à l'administration</title>
+		<link rel="stylesheet" href="{{ asset('css/backoffice.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/vendor/font-awesome.min.css') }}">
+	</head>
+	<body>
+		<div class="col-md-4">
+			<div class="card bg-light">
+				<div class="card-header bg-primary text-white">
+					<h4 class="card-title text-center">
+						<i class="fa fa-lock"></i>
+						Connexion à l'administration
+					</h4>
+				</div>
+				<div class="card-body">
+					{% if hasError %}
+						<div class="alert alert-danger">
+							<p>Les informations que vous avez fournies ne sont pas bonnes.</p>
+						</div>
+					{% endif %}
+					<form method="post">
+						<div class="form-group">
+							<label for="_username">Email</label><input type="text" class="form-control" placeholder="Adresse email ..." name="_username" value="{{ username }}"></div>
+						<div class="form-group">
+							<label for="_password">Mot de passe</label><input type="password" class="form-control" placeholder="Mot de passe ..." name="_password"></div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-primary">
+								<i class="fa fa-lock-open"></i>
+								Connexion
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

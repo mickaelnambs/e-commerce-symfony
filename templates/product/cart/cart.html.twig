@@ -1,0 +1,72 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	Panier
+{% endblock %}
+{% block body %}
+	<div class="container mt-4">
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success text-center">
+				{{ message }}
+			</div>
+		{% endfor %}
+	</div>
+	<div class="container-fluid mt-4">
+		<div class="p-3">
+			<h1 class="text-center">Votre Panier</h1>
+		</div>
+		{% if items | length > 0 %}
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Marque</th>
+						<th>Couleur</th>
+						<th>Genre</th>
+						<th>Taille</th>
+						<th>Prix</th>
+						<th>Quantité</th>
+						<th>Total</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in items %}
+						{% if item.quantity > 0 %}
+							<tr>
+								{% for product in item.product.images %}
+									<td><img src="{{ asset('uploads/' ~ product.name ) }}" alt="image" style="width: 60px; height: 60px;"></td>
+								{% endfor %}
+								<td>{{ item.product.mark }}</td>
+								<td>{{ item.product.color }}</td>
+								<td>{{ item.product.category.title }}</td>
+								<td>{{ item.product.size }}</td>
+								<td>{{ item.product.price | number_format(0, '', ' ') }}
+									Ar</td>
+								<td>{{ item.quantity }}</td>
+								<td>{{ item.product.price * item.quantity | number_format(0, '', ' ') }}
+									Ar</td>
+								<td>
+									<a href="{{ path('product_cart_delete', {id: item.product.id} )}}" class="btn btn-danger" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
+										<i class="fa fa-trash"></i>
+									</a>
+								</td>
+							</tr>
+						{% endif %}
+					{% endfor %}
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="7" class="text-right">Total:
+						</td>
+						<td>{{ total | number_format(0, '', ' ') }}
+							Ar</td>
+					</tr>
+				</tfoot>
+			</table>
+		{% else %}
+			<div class="alert alert-success">
+				<p>Votre panier est vide !</p>
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}

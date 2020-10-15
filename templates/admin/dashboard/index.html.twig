@@ -1,0 +1,55 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}
+	Administration du site
+{% endblock %}
+{% block body %}
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col">
+				<div class="card bg-primary text-white mb-3 text-center">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-4">
+								<i class="fa fa-users fa-3x"></i>
+							</div>
+							<div class="col-8">
+								<h4 class="card-title">{{ stats.users }}
+									utilisateurs</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card text-white bg-secondary mb-3 text-center">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-4">
+								<i class="fa fa-folder fa-3x"></i>
+							</div>
+							<div class="col-8">
+								<h4 class="card-title">{{ stats.products }}
+									Produits</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card text-white bg-warning mb-3 text-center">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-4">
+								<i class="fa fa-book fa-3x"></i>
+							</div>
+							<div class="col-8">
+								<h4 class="card-title">{{ stats.categories }}
+									Categories</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+body {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
+
+.bg-coffee {
+    background-color: #000;
+}
+
+.card {
+    margin-top: 20%;
+}
