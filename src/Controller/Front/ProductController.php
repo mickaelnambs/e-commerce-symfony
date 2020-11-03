@@ -2,11 +2,15 @@
 
 namespace App\Controller\Front;
 
+use App\Entity\Contact;
 use App\Entity\Product;
+use App\Form\ContactType;
 use App\Form\ProductType;
 use App\Service\CartService;
 use App\Entity\ProductSearch;
+use App\Constant\PageConstant;
 use App\Form\ProductSearchType;
+use App\Constant\MessageConstant;
 use App\Controller\BaseController;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,7 +57,7 @@ class ProductController extends BaseController
      * 
      * @return Response
      */
-    public function index(Request $request, PaginatorInterface $paginator)
+    public function index(Request $request, PaginatorInterface $paginator): Response
     {
         $search = new ProductSearch();
         $form = $this->createForm(ProductSearchType::class, $search);
@@ -61,7 +65,8 @@ class ProductController extends BaseController
 
         $products = $paginator->paginate(
             $this->productRepository->findAllVisibleQuery($search),
-            $request->query->getInt('page', 1), 6
+            $request->query->getInt('page', PageConstant::DEFAULT_PAGE), 
+            PageConstant::DEFAULT_NUMBER_PER_PAGE
         );
 
         return $this->render('product/index.html.twig', [
@@ -81,7 +86,7 @@ class ProductController extends BaseController
      * 
      * @return Response
      */
-    public function new(Request $request)
+    public function new(Request $request): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
@@ -95,7 +100,7 @@ class ProductController extends BaseController
             $this->save($product);
 
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "Le produit <strong>{$product->getMark()}</strong> a bien été crée !"
             );
 
@@ -113,11 +118,11 @@ class ProductController extends BaseController
      * @Route("/{slug}-{id}", name="product_show", methods={"GET"}, requirements={"slug": "[a-z0-9\-]*"})
      *
      * @param Product $product
-     * @param string $string
+     * @param string $slug
      * 
      * @return Response
      */
-    public function show(Product $product, string $slug)
+    public function show(Product $product, string $slug): Response
     {
         if ($product->getSlug() !== $slug) {
             return $this->redirectToRoute('product_show', [
@@ -141,7 +146,7 @@ class ProductController extends BaseController
      * 
      * @return Response
      */
-    public function edit(Product $product, Request $request)
+    public function edit(Product $product, Request $request): Response
     {
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -154,7 +159,7 @@ class ProductController extends BaseController
             $this->save($product);
 
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "Le produit <strong>{$product->getMark()}</strong> a bien été modifié !"
             );
 
@@ -173,17 +178,18 @@ class ProductController extends BaseController
      * @Security("is_granted('ROLE_USER') and user == product.getAuthor()", message="Vous n'avez pas le droit de supprimer cette ressource")
      *
      * @param Product $product
+     * 
      * @return Response
      */
-    public function delete(Product $product)
+    public function delete(Product $product): Response
     {
         $this->remove($product);
 
         $this->addFlash(
-            'success',
+            MessageConstant::SUCCESS_TYPE,
             "Le produit <strong>{$product->getMark()}</strong> a bien été supprimé !"
         );
-        $this->redirectToRoute('product_index');
+        return $this->redirectToRoute('product_index');
     }
 
     /**
@@ -193,7 +199,7 @@ class ProductController extends BaseController
      * 
      * @return Response
      */
-    public function cart(CartService $cartService)
+    public function cart(CartService $cartService): Response
     {
         return $this->render('product/cart/cart.html.twig', [
             'items' => $cartService->getFullCart(),
@@ -209,7 +215,7 @@ class ProductController extends BaseController
      * 
      * @return Response
      */
-    public function addToCart(int $id, CartService $cartService)
+    public function addToCart(int $id, CartService $cartService): Response
     {
         if (null !== $id) {
             $cartService->add($id);
@@ -228,7 +234,7 @@ class ProductController extends BaseController
      * 
      * @return Response
      */
-    public function removeToCart(int $id, CartService $cartService)
+    public function removeToCart(int $id, CartService $cartService): Response
     {
         $cartService->remove($id);
         return $this->redirectToRoute('product_cart');

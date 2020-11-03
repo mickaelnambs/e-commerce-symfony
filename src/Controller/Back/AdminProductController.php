@@ -4,6 +4,8 @@ namespace App\Controller\Back;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Constant\PageConstant;
+use App\Constant\MessageConstant;
 use App\Controller\BaseController;
 use App\Service\PaginationService;
 use App\Repository\ProductRepository;
@@ -49,10 +51,10 @@ class AdminProductController extends BaseController
      * 
      * @return Response
      */
-    public function index($page, PaginationService $pagination)
+    public function index($page, PaginationService $pagination): Response
     {
         $pagination->setEntityClass(Product::class)
-            ->setLimit(5)
+            ->setLimit(PageConstant::DEFAULT_NUMBER_PER_PAGE)
             ->setPage($page);
 
         return $this->render('admin/product/index.html.twig', [
@@ -61,15 +63,51 @@ class AdminProductController extends BaseController
     }
 
     /**
-     * Edit product.
+     * Créer un nouveau produit.
      * 
-     * @Route("/{id}/edit", name="admin_product_edit", methods={"GET", "POST"})
+     * @Route("/new", name="admin_product_new", methods={"GET", "POST"})
      *
      * @param Request $request
      * 
      * @return Response
      */
-    public function edit(Product $product, Request $request)
+    public function new(Request $request): Response
+    {
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('images')->getData();
+            $product->setAuthor($this->getUser());
+
+            $this->uploadFiles($file, $product);
+            $this->save($product);
+
+            $this->addFlash(
+                MessageConstant::SUCCESS_TYPE,
+                "Le produit <strong>{$product->getMark()}</strong> a bien été crée !"
+            );
+
+            return $this->redirectToRoute('product_index');
+        }
+        return $this->render('admin/product/new.html.twig', [
+            'product' => $product,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * Edit product.
+     * 
+     * @Route("/{id}/edit", name="admin_product_edit", methods={"GET", "POST"})
+     * 
+     * @param Product $product
+     * @param Request $request
+     * 
+     * @return Response
+     */
+    public function edit(Product $product, Request $request): Response
     {
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -83,7 +121,7 @@ class AdminProductController extends BaseController
             $this->save($product);
 
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "Le produit <strong>{$product->getMark()}</strong> a bien été modifié !"
             );
 
@@ -104,12 +142,12 @@ class AdminProductController extends BaseController
      * 
      * @return Response
      */
-    public function delete(Product $product)
+    public function delete(Product $product): Response
     {
         if ($product) {
             $this->remove($product);
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "Le produit <strong>{$product->getMark()}</strong> a bien été supprimé !"
             );
             return new JsonResponse(['success' => 1]);

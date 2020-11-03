@@ -2,8 +2,11 @@
 
 namespace App\Controller\Back;
 
+use App\Constant\MessageConstant;
 use App\Entity\User;
 use App\Form\EditUserType;
+use App\Constant\PageConstant;
+use App\Form\RegistrationType;
 use App\Controller\BaseController;
 use App\Repository\UserRepository;
 use App\Service\PaginationService;
@@ -54,10 +57,10 @@ class AdminAccountController extends BaseController
      * 
      * @return Response
      */
-    public function index($page, PaginationService $pagination)
+    public function index($page, PaginationService $pagination): Response
     {
         $pagination->setEntityClass(User::class)
-            ->setLimit(5)
+            ->setLimit(PageConstant::DEFAULT_NUMBER_PER_PAGE)
             ->setPage($page);
 
         return $this->render('admin/account/index.html.twig', [
@@ -74,11 +77,46 @@ class AdminAccountController extends BaseController
      * 
      * @return Response
      */
-    public function login(AuthenticationUtils $authenticationUtils)
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
         return $this->render('admin/account/login.html.twig', [
             'username' => $authenticationUtils->getLastUsername(),
             'hasError' => $authenticationUtils->getLastAuthenticationError()
+        ]);
+    }
+
+    /**
+     * Permet d'ajouter un nouvel utilisateur.
+     * 
+     * @Route("/admin/register", name="admin_account_register", methods={"GET", "POST"})
+     *
+     * @param Request $request
+     * 
+     * @return Response
+     */
+    public function registration(Request $request): Response
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $hash = $this->passwordEncoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($hash);
+
+            $file = $form->get('image')->getData();
+            $this->uploadFile($file, $user);
+
+            $this->save($user);
+            
+            $this->addFlash(
+                MessageConstant::SUCCESS_TYPE,
+                "Votre compte a bien été créé ! Vous pouvez maintenant vous connecter !"
+            );
+            return $this->redirectToRoute('account_login');
+        }
+        return $this->render('admin/account/registration.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 
@@ -105,7 +143,7 @@ class AdminAccountController extends BaseController
      * 
      * @return Response
      */
-    public function edit(User $user, Request $request)
+    public function edit(User $user, Request $request): Response
     {
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($request);
@@ -115,7 +153,7 @@ class AdminAccountController extends BaseController
             $this->save($user);
 
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "L'utilisateur {$user->getFirstName()} a bien été modifié !"
             );
             return $this->redirectToRoute('admin_account_index');
@@ -135,12 +173,12 @@ class AdminAccountController extends BaseController
      * 
      * @return Response
      */
-    public function delete(User $user)
+    public function delete(User $user): Response
     {
         if ($user) {
             $this->remove($user);
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "L'utilisateur {$user->getFirstName()} a bien été supprimé !"
             );
             return new JsonResponse(['success' => 1]);

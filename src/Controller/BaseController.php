@@ -32,7 +32,7 @@ class BaseController extends AbstractController
      * 
      * @return bool
      */
-    public function save(object $object)
+    public function save(object $object): bool
     {
         try {
             if (!$object->getId()) {
@@ -51,7 +51,7 @@ class BaseController extends AbstractController
      * 
      * @return bool
      */
-    public function remove(object $object)
+    public function remove(object $object): bool
     {
         try {
             if ($object) {
@@ -71,7 +71,7 @@ class BaseController extends AbstractController
      * 
      * @return object
      */
-    public function uploadFile(File $file, object $object)
+    public function uploadFile(File $file, object $object): object
     {
         $filename = bin2hex(random_bytes(6)) . '.' . $file->guessExtension();
         $file->move($this->getParameter('image_directory'), $filename);
@@ -86,7 +86,7 @@ class BaseController extends AbstractController
      * 
      * @return object
      */
-    public function uploadFiles(array $files, object $object)
+    public function uploadFiles(array $files, object $object): object
     {
         foreach ($files as $file) {
             $filename = bin2hex(random_bytes(6)) . '.' . $file->guessExtension();

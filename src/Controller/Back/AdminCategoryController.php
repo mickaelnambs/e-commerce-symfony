@@ -4,6 +4,8 @@ namespace App\Controller\Back;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Constant\PageConstant;
+use App\Constant\MessageConstant;
 use App\Controller\BaseController;
 use App\Service\PaginationService;
 use App\Repository\CategoryRepository;
@@ -47,10 +49,10 @@ class AdminCategoryController extends BaseController
      * 
      * @return Response
      */
-    public function index($page, PaginationService $pagination)
+    public function index($page, PaginationService $pagination): Response
     {
         $pagination->setEntityClass(Category::class)
-            ->setLimit(5)
+            ->setLimit(PageConstant::DEFAULT_NUMBER_PER_PAGE)
             ->setPage($page);
 
         return $this->render('admin/category/index.html.twig', [
@@ -68,7 +70,7 @@ class AdminCategoryController extends BaseController
      * 
      * @return Response
      */
-    public function edit(Category $category, Request $request)
+    public function edit(Category $category, Request $request): Response
     {
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
@@ -78,7 +80,7 @@ class AdminCategoryController extends BaseController
             $this->save($category);
 
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "La catégorie <strong>{$category->getTitle()}</strong> a bien été modifiée !"
             );
 
@@ -99,12 +101,12 @@ class AdminCategoryController extends BaseController
      * 
      * @return Response
      */
-    public function delete(Category $category)
+    public function delete(Category $category): Response
     {
         if ($category) {
             $this->remove($category);
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "La catégorie <strong>{$category->getTitle()}</strong> a bien été supprimée !"
             );
             return new JsonResponse(['success' => 1]);

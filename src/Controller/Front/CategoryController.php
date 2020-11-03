@@ -4,6 +4,7 @@ namespace App\Controller\Front;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Constant\MessageConstant;
 use App\Controller\BaseController;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,7 +45,7 @@ class CategoryController extends BaseController
      * 
      * @return Response
      */
-    public function index()
+    public function index(): Response
     {
         return $this->render('category/index.html.twig', [
             'categories' => $this->categoryRepository->findAll()
@@ -60,7 +61,7 @@ class CategoryController extends BaseController
      * 
      * @return Response
      */
-    public function new(Request $request)
+    public function new(Request $request): Response
     {
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
@@ -72,7 +73,7 @@ class CategoryController extends BaseController
             $this->save($category);
 
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "La catégorie <strong>{$category->getTitle()}</strong> a bien été créee !"
             );
             return $this->redirectToRoute('category_index');
@@ -93,7 +94,7 @@ class CategoryController extends BaseController
      * 
      * @return Response
      */
-    public function edit(Category $category, Request $request)
+    public function edit(Category $category, Request $request): Response
     {
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
@@ -104,7 +105,7 @@ class CategoryController extends BaseController
             $this->save($category);
 
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "La catégorie <strong>{$category->getTitle()}</strong> a bien été modifiée !"
             );
             return $this->redirectToRoute('category_index');
@@ -125,14 +126,14 @@ class CategoryController extends BaseController
      * 
      * @return Response
      */
-    public function delete(Category $category)
-    {
+    public function delete(Category $category): Response
+    {    
         $this->remove($category);
 
         $this->addFlash(
-            'success',
+            MessageConstant::SUCCESS_TYPE,
             "La catégorie <strong>{$category->getTitle()}</strong> a bien été supprimée !"
         );
-        $this->redirectToRoute('category_index');
+        return $this->redirectToRoute('category_index');
     }
 }

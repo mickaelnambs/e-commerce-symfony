@@ -26,7 +26,7 @@ class AdminDashboardController extends AbstractController
      * 
      * @return Response
      */
-    public function index(StatsService $statsService)
+    public function index(StatsService $statsService): Response
     {
         return $this->render('admin/dashboard/index.html.twig', [
             'stats' => $statsService->getStats()

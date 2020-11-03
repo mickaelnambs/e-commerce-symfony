@@ -17,7 +17,7 @@ class RegistrationType extends ApplicationType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName', TextType::class, $this->getConfiguration("Prénom", "Votre prénom ..."))
+            ->add('firstName', TextType::class, $this->getConfiguration("Prénom(s)", "Votre prénom ..."))
             ->add('lastName', TextType::class, $this->getConfiguration("Nom", "Votre nom de famille ..."))
             ->add('email', EmailType::class, $this->getConfiguration("Email", "Votre adresse email"))
             ->add('phoneNumber', TextType::class, $this->getConfiguration("Téléphone", "Votre numéro téléphone ..."))

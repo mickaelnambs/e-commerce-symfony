@@ -5,6 +5,7 @@ namespace App\Controller\Front;
 use App\Entity\User;
 use App\Form\RegistrationType;
 use App\Form\PasswordUpdateType;
+use App\Constant\MessageConstant;
 use App\Controller\BaseController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,7 +46,7 @@ class AccountController extends BaseController
      * 
      * @return Response
      */
-    public function registration(Request $request)
+    public function registration(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
@@ -61,7 +62,7 @@ class AccountController extends BaseController
             $this->save($user);
             
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "Votre compte a bien été créé ! Vous pouvez maintenant vous connecter !"
             );
             return $this->redirectToRoute('account_login');
@@ -81,7 +82,7 @@ class AccountController extends BaseController
      * 
      * @return Response
      */
-    public function login(AuthenticationUtils $authenticationUtils)
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
         return $this->render('account/login.html.twig', [
             'username' => $authenticationUtils->getLastUsername(),
@@ -108,9 +109,10 @@ class AccountController extends BaseController
      * @IsGranted("ROLE_USER")
      *
      * @param Request $request
+     * 
      * @return Response
      */
-    public function profile(Request $request)
+    public function profile(Request $request): Response
     {
         $user = $this->getUser();
         $form = $this->createForm(RegistrationType::class, $user);
@@ -124,7 +126,7 @@ class AccountController extends BaseController
             $this->save($user);
 
             $this->addFlash(
-                'success',
+                MessageConstant::SUCCESS_TYPE,
                 "Les données du profil ont été enregistrée avec succès !"
             );
         }
@@ -170,7 +172,7 @@ class AccountController extends BaseController
      * 
      * @return Response
      */
-    public function myAccount()
+    public function myAccount(): Response
     {
         return $this->render('account/index.html.twig', [
             'users' => $this->getUser(),
