@@ -5,11 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="U-XA-Compatible" content="ie=edge">
         {% block stylesheets %}
-			<link rel="stylesheet" href="{{ asset('css/vendor/bootstrap.min.css') }}">
-			<link rel="stylesheet" href="{{ asset('css/vendor/font-awesome.min.css') }}">
-			<link rel="stylesheet" href="{{ asset('css/vendor/aos.css') }}">
-			<link rel="stylesheet" href="{{ asset('css/vendor/style.css') }}">
-			<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+			{% include "partials/link.html.twig" %}
 		{% endblock %}
 	</head>
 	<body>
@@ -20,9 +16,7 @@
         {% include "partials/footer.html.twig" %}
         
 		{% block javascripts %}
-			<script src="{{ asset('js/vendor/jquery-3.3.1.min.js') }}"></script>
-			<script src="{{ asset('js/vendor/aos.js') }}"></script>
-			<script src="{{ asset('js/main.js') }}"></script>
+			{% include "partials/script.html.twig" %}
 		{% endblock %}
 	</body>
 </html>

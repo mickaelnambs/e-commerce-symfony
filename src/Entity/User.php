@@ -148,7 +148,7 @@ class User implements UserInterface
 
     public function setRoles(array $roles): self
     {
-        $this->roles = $roles;
+        $this->roles = !empty($roles) ? $roles : ['ROLE_USER'];
 
         return $this;
     }

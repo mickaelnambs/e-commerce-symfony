@@ -19,8 +19,6 @@ class Product
 {
 
     use Timestamps;
-
-    public const NUM_ITEMS = 10;
     
     /**
      * @ORM\Id()

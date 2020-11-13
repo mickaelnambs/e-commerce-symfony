@@ -9,9 +9,9 @@
 			<div class="p-3">
 				<h1 class="text-center">Gestion des catégories</h1>
 			</div>
-			<table class="table table-hover">
+			<table class="table table-hover table-bordered">
 				<thead>
-					<tr>
+					<tr class="text-center">
 						<th>Id</th>
 						<th>Titre</th>
 						<th>Produits</th>
@@ -21,7 +21,7 @@
 				</thead>
 				<tbody>
 					{% for category in pagination.data %}
-						<tr>
+						<tr class="text-center">
 							<td>{{ category.id }}</td>
 							<td>{{ category.title }}</td>
 							<td>

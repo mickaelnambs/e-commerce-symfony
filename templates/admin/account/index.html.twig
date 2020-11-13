@@ -13,9 +13,9 @@
 					</a>
 				</span>
 			</h2>
-			<table class="table table-hover">
+			<table class="table table-hover table-bordered">
 				<thead>
-					<tr>
+					<tr class="text-center">
 						<th>Id</th>
 						<th>Prénom(s)</th>
 						<th>Nom</th>
@@ -27,7 +27,7 @@
 				</thead>
 				<tbody>
 					{% for user in pagination.data %}
-						<tr>
+						<tr class="text-center">
 							<td>{{user.id}}</td>
 							<td>{{user.firstName}}</td>
 							<td>{{user.lastName}}</td>
