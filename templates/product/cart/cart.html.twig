@@ -11,13 +11,11 @@
 		{% endfor %}
 	</div>
 	<div class="container-fluid mt-4">
-		<div class="p-3">
-			<h1 class="text-center">Votre Panier</h1>
-		</div>
+		<h2 class="text-center">Votre Panier</h2>
 		{% if items | length > 0 %}
-			<table class="table table-striped">
+			<table class="table table-hover table-bordered">
 				<thead>
-					<tr>
+					<tr class="text-center">
 						<th></th>
 						<th>Marque</th>
 						<th>Couleur</th>
@@ -32,7 +30,7 @@
 				<tbody>
 					{% for item in items %}
 						{% if item.quantity > 0 %}
-							<tr>
+							<tr class="text-center">
 								{% for product in item.product.images %}
 									<td><img src="{{ asset('uploads/' ~ product.name ) }}" alt="image" style="width: 60px; height: 60px;"></td>
 								{% endfor %}
@@ -55,11 +53,9 @@
 					{% endfor %}
 				</tbody>
 				<tfoot>
-					<tr>
-						<td colspan="7" class="text-right">Total:
-						</td>
-						<td>{{ total | number_format(0, '', ' ') }}
-							Ar</td>
+					<tr class="text-center">
+						<td colspan="7" class="text-right">Total: </td>
+						<td>{{ total | number_format(0, '', ' ') }} Ar</td>
 					</tr>
 				</tfoot>
 			</table>
