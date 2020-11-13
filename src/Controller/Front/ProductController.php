@@ -75,43 +75,6 @@ class ProductController extends BaseController
         ]);
     }
 
-
-    /**
-     * Créer un nouveau produit.
-     * 
-     * @Route("/new", name="product_new", methods={"GET", "POST"})
-     * @IsGranted("ROLE_USER")
-     *
-     * @param Request $request
-     * 
-     * @return Response
-     */
-    public function new(Request $request): Response
-    {
-        $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('images')->getData();
-            $product->setAuthor($this->getUser());
-
-            $this->uploadFiles($file, $product);
-            $this->save($product);
-
-            $this->addFlash(
-                MessageConstant::SUCCESS_TYPE,
-                "Le produit <strong>{$product->getMark()}</strong> a bien été crée !"
-            );
-
-            return $this->redirectToRoute('product_index');
-        }
-        return $this->render('product/new.html.twig', [
-            'product' => $product,
-            'form' => $form->createView()
-        ]);
-    }
-
     /**
      * Affiche le detail d'un produit.
      * 
@@ -133,63 +96,6 @@ class ProductController extends BaseController
         return $this->render('product/show.html.twig', [
             'product' => $product,
         ]);
-    }
-
-    /**
-     * Modifier un produit.
-     * 
-     * @Route("/{id}/edit", name="product_edit", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_USER') and user == product.getAuthor()", message="Vous n'avez pas le droit de modifier cette ressource")
-     *
-     * @param Request $request
-     * @param Product $product
-     * 
-     * @return Response
-     */
-    public function edit(Product $product, Request $request): Response
-    {
-        $form = $this->createForm(ProductType::class, $product);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('images')->getData();
-            $product->setAuthor($this->getUser());
-
-            $this->uploadFiles($file, $product);
-            $this->save($product);
-
-            $this->addFlash(
-                MessageConstant::SUCCESS_TYPE,
-                "Le produit <strong>{$product->getMark()}</strong> a bien été modifié !"
-            );
-
-            return $this->redirectToRoute('product_index');
-        }
-        return $this->render('product/edit.html.twig', [
-            'product' => $product,
-            'form' => $form->createView()
-        ]);
-    }
-
-    /**
-     * Supprimer un produit.
-     * 
-     * @Route("/{id}/delete", name="product_delete", methods={"DELETE"})
-     * @Security("is_granted('ROLE_USER') and user == product.getAuthor()", message="Vous n'avez pas le droit de supprimer cette ressource")
-     *
-     * @param Product $product
-     * 
-     * @return Response
-     */
-    public function delete(Product $product): Response
-    {
-        $this->remove($product);
-
-        $this->addFlash(
-            MessageConstant::SUCCESS_TYPE,
-            "Le produit <strong>{$product->getMark()}</strong> a bien été supprimé !"
-        );
-        return $this->redirectToRoute('product_index');
     }
 
     /**

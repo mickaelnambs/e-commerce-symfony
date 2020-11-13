@@ -61,6 +61,38 @@ class AdminCategoryController extends BaseController
     }
 
     /**
+     * Create one category.
+     * 
+     * @Route("/new", name="admin_category_new", methods={"GET", "POST"})
+     *
+     * @param Request $request
+     * 
+     * @return Response
+     */
+    public function new(Request $request): Response
+    {
+        $category = new Category();
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $category->setAuthor($this->getUser());
+            $this->save($category);
+
+            $this->addFlash(
+                MessageConstant::SUCCESS_TYPE,
+                "La catégorie <strong>{$category->getTitle()}</strong> a bien été créee !"
+            );
+
+            return $this->redirectToRoute('admin_category_index');
+        }
+        return $this->render('admin/category/new.html.twig', [
+            'category' => $category,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * Modify a category.
      * 
      * @Route("/{id}/edit", name="admin_category_edit", methods={"GET", "POST"})
@@ -86,7 +118,7 @@ class AdminCategoryController extends BaseController
 
             return $this->redirectToRoute('admin_category_index');
         }
-        return $this->render('admin/category/index.html.twig', [
+        return $this->render('admin/category/edit.html.twig', [
             'category' => $category,
             'form' => $form->createView()
         ]);

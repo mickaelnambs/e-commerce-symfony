@@ -51,6 +51,4 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         
     role_hierarchy:
-        ROLE_EDITOR: ROLE_USER
-        ROLE_MODO: ROLE_EDITOR
-        ROLE_ADMIN: ROLE_MODO
+        ROLE_ADMIN: ROLE_USER

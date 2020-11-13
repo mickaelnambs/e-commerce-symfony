@@ -20,8 +20,6 @@ class EditUserType extends ApplicationType
             ->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Utilisateur' => 'ROLE_USER',
-                    'Editeur' => 'ROLE_EDITOR',
-                    'Moderateur' => 'ROLE_MODO',
                     'Administrateur' => 'ROLE_ADMIN'
                 ],
                 'expanded' => true,

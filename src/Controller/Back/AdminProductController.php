@@ -89,7 +89,7 @@ class AdminProductController extends BaseController
                 "Le produit <strong>{$product->getMark()}</strong> a bien été crée !"
             );
 
-            return $this->redirectToRoute('product_index');
+            return $this->redirectToRoute('admin_product_index');
         }
         return $this->render('admin/product/new.html.twig', [
             'product' => $product,
