@@ -65,7 +65,7 @@ class AdminProductController extends BaseController
     /**
      * Créer un nouveau produit.
      * 
-     * @Route("/new", name="admin_product_new", methods={"GET", "POST"})
+     * @Route("/new", name="admin_product_new", methods={"POST","GET"})
      *
      * @param Request $request
      * 
@@ -89,6 +89,10 @@ class AdminProductController extends BaseController
                 );
                 return $this->redirectToRoute('admin_product_index');
             }
+            $this->addFlash(
+                MessageConstant::ERROR_TYPE,
+                "Il y a une erreur pendant la création"
+            );
             return $this->redirectToRoute('admin_product_new');
         }
         return $this->render('admin/product/new.html.twig', [
@@ -100,7 +104,7 @@ class AdminProductController extends BaseController
     /**
      * Edit product.
      * 
-     * @Route("/{id}/edit", name="admin_product_edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="admin_product_edit", methods={"POST","GET"})
      * 
      * @param Product $product
      * @param Request $request
@@ -125,6 +129,10 @@ class AdminProductController extends BaseController
                 );
                 return $this->redirectToRoute('admin_product_index');
             }
+            $this->addFlash(
+                MessageConstant::ERROR_TYPE,
+                "Il y a une erreur pendant la modification !"
+            );
             return $this->redirectToRoute('admin_product_edit', ['id' => $product->getId()]);
         }
         return $this->render('admin/product/edit.html.twig', [

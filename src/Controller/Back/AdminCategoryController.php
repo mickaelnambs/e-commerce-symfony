@@ -42,7 +42,7 @@ class AdminCategoryController extends BaseController
     /**
      * Pagination and retrieve all categories.
      * 
-     * @Route("/{page<\d+>?1}", name="admin_category_index")
+     * @Route("/{page<\d+>?1}", name="admin_category_index", methods={"POST","GET"})
      *
      * @param int $page
      * @param PaginationService $pagination
@@ -63,7 +63,7 @@ class AdminCategoryController extends BaseController
     /**
      * Create one category.
      * 
-     * @Route("/new", name="admin_category_new", methods={"GET", "POST"})
+     * @Route("/new", name="admin_category_new", methods={"POST","GET"})
      *
      * @param Request $request
      * 
@@ -77,17 +77,21 @@ class AdminCategoryController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $category->setAuthor($this->getUser());
-            $this->save($category);
 
+            if ($this->save($category)) {
+                $this->addFlash(
+                    MessageConstant::SUCCESS_TYPE,
+                    "La catégorie {$category->getTitle()} a bien été créee !"
+                );
+                return $this->redirectToRoute('admin_category_index');
+            }
             $this->addFlash(
-                MessageConstant::SUCCESS_TYPE,
-                "La catégorie {$category->getTitle()} a bien été créee !"
+                MessageConstant::ERROR_TYPE,
+                "Il y a une erreur pendant la création"
             );
-
-            return $this->redirectToRoute('admin_category_index');
+            return $this->redirectToRoute('admin_category_new');
         }
         return $this->render('admin/category/new.html.twig', [
-            'category' => $category,
             'form' => $form->createView()
         ]);
     }
@@ -95,7 +99,7 @@ class AdminCategoryController extends BaseController
     /**
      * Modify a category.
      * 
-     * @Route("/{id}/edit", name="admin_category_edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="admin_category_edit",methods={"POST","GET"})
      *
      * @param Category $category
      * @param Request $request
@@ -109,17 +113,21 @@ class AdminCategoryController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $category->setAuthor($this->getUser());
-            $this->save($category);
 
+            if ($this->save($category)) {
+                $this->addFlash(
+                    MessageConstant::SUCCESS_TYPE,
+                    "La catégorie {$category->getTitle()} a bien été modifiée !"
+                );
+                return $this->redirectToRoute('admin_category_index');
+            }
             $this->addFlash(
-                MessageConstant::SUCCESS_TYPE,
-                "La catégorie {$category->getTitle()} a bien été modifiée !"
+                MessageConstant::ERROR_TYPE,
+                "Il y a une erreur pendant la modification !"
             );
-
-            return $this->redirectToRoute('admin_category_index');
+            return $this->redirectToRoute('admin_category_edit', ['id' => $category->getId()]);
         }
         return $this->render('admin/category/edit.html.twig', [
-            'category' => $category,
             'form' => $form->createView()
         ]);
     }

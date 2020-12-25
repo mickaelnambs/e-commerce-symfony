@@ -44,13 +44,13 @@ class ProductController extends BaseController
     public function __construct(EntityManagerInterface $entityManager, ProductRepository $productRepository)
     {
         parent::__construct($entityManager);
-        $this->productRepository = $productRepository;     
+        $this->productRepository = $productRepository;
     }
 
     /**
      * Pagination des produits et filtre de recherche.
      * 
-     * @Route("/", name="product_index")
+     * @Route("/", name="product_index", methods={"POST","GET"})
      *
      * @param Request $request
      * @param PaginatorInterface $paginator
@@ -65,7 +65,7 @@ class ProductController extends BaseController
 
         $products = $paginator->paginate(
             $this->productRepository->findAllVisibleQuery($search),
-            $request->query->getInt('page', PageConstant::DEFAULT_PAGE), 
+            $request->query->getInt('page', PageConstant::DEFAULT_PAGE),
             PageConstant::DEFAULT_NUMBER_PER_PAGE
         );
 
@@ -78,7 +78,7 @@ class ProductController extends BaseController
     /**
      * Affiche le detail d'un produit.
      * 
-     * @Route("/{slug}-{id}", name="product_show", methods={"GET"}, requirements={"slug": "[a-z0-9\-]*"})
+     * @Route("/{slug}-{id}", name="product_show", methods={"POST","GET"}, requirements={"slug": "[a-z0-9\-]*"})
      *
      * @param Product $product
      * @param string $slug
@@ -99,7 +99,7 @@ class ProductController extends BaseController
     }
 
     /**
-     * @Route("/cart", name="product_cart")
+     * @Route("/cart", name="product_cart", methods={"POST","GET"})
      * 
      * @param CartService $cartService
      * 
@@ -114,7 +114,7 @@ class ProductController extends BaseController
     }
 
     /**
-     * @Route("/cart/{id}", name="product_cart_add")
+     * @Route("/cart/{id}", name="product_cart_add", methods={"POST","GET"})
      * 
      * @param integer $id
      * @param CartService $cartService

@@ -20,7 +20,7 @@ class AdminDashboardController extends AbstractController
     /**
      * Dashboard.
      * 
-     * @Route("/admin", name="admin_dashboard_index")
+     * @Route("/admin", name="admin_dashboard_index", methods={"POST","GET"})
      *
      * @param StatsService $statsService
      * 

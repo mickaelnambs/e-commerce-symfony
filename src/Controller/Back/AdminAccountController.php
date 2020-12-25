@@ -50,7 +50,7 @@ class AdminAccountController extends BaseController
     /**
      * Pagination and retrieve all users accounts.
      * 
-     * @Route("/admin/accounts/{page<\d+>?1}", name="admin_account_index")
+     * @Route("/admin/accounts/{page<\d+>?1}", name="admin_account_index", methods={"POST","GET"})
      *
      * @param int $page
      * @param PaginationService $pagination
@@ -71,7 +71,7 @@ class AdminAccountController extends BaseController
     /**
      * Login.
      * 
-     * @Route("/admin/login", name="admin_account_login")
+     * @Route("/admin/login", name="admin_account_login", methods={"POST","GET"})
      *
      * @param AuthenticationUtils $authenticationUtils
      * 
@@ -88,7 +88,7 @@ class AdminAccountController extends BaseController
     /**
      * Permet d'ajouter un nouvel utilisateur.
      * 
-     * @Route("/admin/register", name="admin_account_register", methods={"GET", "POST"})
+     * @Route("/admin/register", name="admin_account_register", methods={"POST","GET"})
      *
      * @param Request $request
      * 
@@ -140,7 +140,7 @@ class AdminAccountController extends BaseController
     /**
      * Edit user account.
      * 
-     * @Route("/admin/{id}/edit", name="admin_account_edit", methods={"GET", "POST"})
+     * @Route("/admin/{id}/edit", name="admin_account_edit", methods={"POST","GET"})
      * @IsGranted("ROLE_ADMIN")
      *
      * @param User $user

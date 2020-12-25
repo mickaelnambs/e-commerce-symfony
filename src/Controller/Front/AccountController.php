@@ -40,7 +40,7 @@ class AccountController extends BaseController
     /**
      * User inscription.
      * 
-     * @Route("/register", name="account_register", methods={"GET|POST"})
+     * @Route("/register", name="account_register", methods={"POST","GET"})
      *
      * @param Request $request
      * 
@@ -110,7 +110,7 @@ class AccountController extends BaseController
     /**
      * Modify the user profile.
      * 
-     * @Route("/account/profile", name="account_profile", methods={"GET|POST"})
+     * @Route("/account/profile", name="account_profile", methods={"POST","GET"})
      * @IsGranted("ROLE_USER")
      *
      * @param Request $request
@@ -150,7 +150,7 @@ class AccountController extends BaseController
     /**
      * Change password.
      * 
-     * @Route("/account/change-password", methods="GET|POST", name="account_password")
+     * @Route("/account/change-password", name="account_password", methods={"POST","GET"})
      * @IsGranted("ROLE_USER")
      *
      * @param Request $request
@@ -179,7 +179,7 @@ class AccountController extends BaseController
     /**
      * Show profile user connected.
      *
-     * @Route("/account", name="account_index")
+     * @Route("/account", name="account_index", methods={"POST","GET"})
      * @IsGranted("ROLE_USER")
      * 
      * @return Response

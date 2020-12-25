@@ -16,7 +16,7 @@ class HomeController extends AbstractController
     /**
      * Permet d'afficher la page d'accueil.
      * 
-     * @Route("/", name="app_home", methods={"GET", "POST"})
+     * @Route("/", name="app_home", methods={"POST","GET"})
      * 
      * @return Response
      */
