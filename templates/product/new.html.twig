@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Création d'un produit
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		{{ form_start(form) }}
+		<div class="row">
+			<div class="col">
+				<div class="alert alert-light">
+					<h2 class="alert-heading">Informations générales</h2>
+					<hr>
+					{{ form_row(form.mark) }}
+					{{ form_row(form.price) }}
+					{{ form_row(form.color) }}
+					{{ form_row(form.category) }}
+					{{ form_row(form.images) }}
+				</div>
+			</div>
+			<div class="col">
+				<div class="alert alert-light">
+					<h2 class="alert-heading">Détails</h2>
+					<hr>
+                    {{ form_row(form.size) }}
+                    {{ form_row(form.sex) }}
+					{{ form_row(form.description) }}
+
+					<hr>
+					<p>Vous y êtes presque !</p>
+					<button type="submit" class="btn btn-success">
+						<i class="fa fa-check"></i>
+						Créer
+					</button>
+				</div>
+			</div>
+		</div>
+		{{ form_end(form) }}
+
+	</div>
+
+{% endblock %}
+

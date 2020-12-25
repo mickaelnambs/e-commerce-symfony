@@ -79,17 +79,17 @@ class AdminProductController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('images')->getData();
+            $this->uploadFiles($file, $product);
             $product->setAuthor($this->getUser());
 
-            $this->uploadFiles($file, $product);
-            $this->save($product);
-
-            $this->addFlash(
-                MessageConstant::SUCCESS_TYPE,
-                "Le produit <strong>{$product->getMark()}</strong> a bien été crée !"
-            );
-
-            return $this->redirectToRoute('admin_product_index');
+            if ($this->save($product)) {
+                $this->addFlash(
+                    MessageConstant::SUCCESS_TYPE,
+                    "Le produit {$product->getMark()} a bien été crée !"
+                );
+                return $this->redirectToRoute('admin_product_index');
+            }
+            return $this->redirectToRoute('admin_product_new');
         }
         return $this->render('admin/product/new.html.twig', [
             'product' => $product,
@@ -114,18 +114,18 @@ class AdminProductController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('images')->getData();
-            $product->setAuthor($this->getUser())
-                    ->setIsModified(true);
-
             $this->uploadFiles($file, $product);
-            $this->save($product);
+            $product->setAuthor($this->getUser())
+                ->setIsModified(true);
 
-            $this->addFlash(
-                MessageConstant::SUCCESS_TYPE,
-                "Le produit <strong>{$product->getMark()}</strong> a bien été modifié !"
-            );
-
-            return $this->redirectToRoute('admin_product_index');
+            if ($this->save($product)) {
+                $this->addFlash(
+                    MessageConstant::SUCCESS_TYPE,
+                    "Le produit {$product->getMark()} a bien été modifié !"
+                );
+                return $this->redirectToRoute('admin_product_index');
+            }
+            return $this->redirectToRoute('admin_product_edit', ['id' => $product->getId()]);
         }
         return $this->render('admin/product/edit.html.twig', [
             'product' => $product,
@@ -144,17 +144,15 @@ class AdminProductController extends BaseController
      */
     public function delete(Product $product): Response
     {
-        if ($product) {
-            $this->remove($product);
+        if ($this->remove($product)) {
             $this->addFlash(
                 MessageConstant::SUCCESS_TYPE,
-                "Le produit <strong>{$product->getMark()}</strong> a bien été supprimé !"
+                "Le produit {$product->getMark()} a bien été supprimé !"
             );
             return new JsonResponse(['success' => 1]);
         } else {
             return new JsonResponse(['error' => 'Error'], 400);
         }
-
         return $this->redirectToRoute('admin_product_index');
     }
 }

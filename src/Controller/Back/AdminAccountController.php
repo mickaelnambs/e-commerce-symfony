@@ -107,13 +107,18 @@ class AdminAccountController extends BaseController
             $file = $form->get('image')->getData();
             $this->uploadFile($file, $user);
 
-            $this->save($user);
-            
+            if ($this->save($user)) {
+                $this->addFlash(
+                    MessageConstant::SUCCESS_TYPE,
+                    "Votre compte a bien été créé ! Vous pouvez maintenant vous connecter !"
+                );
+                return $this->redirectToRoute('account_login');
+            }
             $this->addFlash(
-                MessageConstant::SUCCESS_TYPE,
-                "Votre compte a bien été créé ! Vous pouvez maintenant vous connecter !"
+                MessageConstant::ERROR_TYPE,
+                "Il y a un probleme pendant l'inscription ! Veuiller reessayer !"
             );
-            return $this->redirectToRoute('account_login');
+            return $this->redirectToRoute('admin_account_register');
         }
         return $this->render('admin/account/registration.html.twig', [
             'form' => $form->createView()
@@ -150,13 +155,18 @@ class AdminAccountController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setIsModified(true);
-            $this->save($user);
-
+            if ($this->save($user)) {
+                $this->addFlash(
+                    MessageConstant::SUCCESS_TYPE,
+                    "Le compte de {$user->getFirstName()} a bien été modifié !"
+                );
+                return $this->redirectToRoute('admin_account_index');
+            }
             $this->addFlash(
-                MessageConstant::SUCCESS_TYPE,
-                "L'utilisateur {$user->getFirstName()} a bien été modifié !"
+                MessageConstant::ERROR_TYPE,
+                "Il y a un probleme pendant la modification de votre compte ! Veuillez reessayer !"
             );
-            return $this->redirectToRoute('admin_account_index');
+            return $this->redirectToRoute('admin_account_edit', ['id' => $user->getId()]);
         }
         return $this->render('admin/account/edit.html.twig', [
             'form' => $form->createView()
@@ -175,8 +185,7 @@ class AdminAccountController extends BaseController
      */
     public function delete(User $user): Response
     {
-        if ($user) {
-            $this->remove($user);
+        if ($this->remove($user)) {
             $this->addFlash(
                 MessageConstant::SUCCESS_TYPE,
                 "L'utilisateur {$user->getFirstName()} a bien été supprimé !"

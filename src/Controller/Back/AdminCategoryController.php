@@ -36,7 +36,7 @@ class AdminCategoryController extends BaseController
     public function __construct(EntityManagerInterface $entityManager, CategoryRepository $categoryRepository)
     {
         parent::__construct($entityManager);
-        $this->categoryRepository = $categoryRepository;    
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -81,7 +81,7 @@ class AdminCategoryController extends BaseController
 
             $this->addFlash(
                 MessageConstant::SUCCESS_TYPE,
-                "La catégorie <strong>{$category->getTitle()}</strong> a bien été créee !"
+                "La catégorie {$category->getTitle()} a bien été créee !"
             );
 
             return $this->redirectToRoute('admin_category_index');
@@ -113,7 +113,7 @@ class AdminCategoryController extends BaseController
 
             $this->addFlash(
                 MessageConstant::SUCCESS_TYPE,
-                "La catégorie <strong>{$category->getTitle()}</strong> a bien été modifiée !"
+                "La catégorie {$category->getTitle()} a bien été modifiée !"
             );
 
             return $this->redirectToRoute('admin_category_index');
@@ -135,11 +135,10 @@ class AdminCategoryController extends BaseController
      */
     public function delete(Category $category): Response
     {
-        if ($category) {
-            $this->remove($category);
+        if ($this->remove($category)) {
             $this->addFlash(
                 MessageConstant::SUCCESS_TYPE,
-                "La catégorie <strong>{$category->getTitle()}</strong> a bien été supprimée !"
+                "La catégorie {$category->getTitle()} a bien été supprimée !"
             );
             return new JsonResponse(['success' => 1]);
         } else {
@@ -147,5 +146,4 @@ class AdminCategoryController extends BaseController
         }
         return $this->redirectToRoute('admin_category_index');
     }
-
 }

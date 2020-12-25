@@ -59,13 +59,18 @@ class AccountController extends BaseController
             $file = $form->get('image')->getData();
             $this->uploadFile($file, $user);
 
-            $this->save($user);
-            
+            if ($this->save($user)) {
+                $this->addFlash(
+                    MessageConstant::SUCCESS_TYPE,
+                    "Votre compte a bien été créé ! Vous pouvez maintenant vous connecter !"
+                );
+                return $this->redirectToRoute('account_login');
+            }
             $this->addFlash(
-                MessageConstant::SUCCESS_TYPE,
-                "Votre compte a bien été créé ! Vous pouvez maintenant vous connecter !"
+                MessageConstant::ERROR_TYPE,
+                "Il y a un probleme pendant l'inscription ! Veuiller reessayer !"
             );
-            return $this->redirectToRoute('account_login');
+            return $this->redirectToRoute('account_register');
         }
         return $this->render('account/registration.html.twig', [
             'form' => $form->createView()
@@ -123,12 +128,19 @@ class AccountController extends BaseController
             $user->setIsModified(true);
 
             $this->uploadFile($file, $user);
-            $this->save($user);
 
+            if ($this->save($user)) {
+                $this->addFlash(
+                    MessageConstant::SUCCESS_TYPE,
+                    "Les données du profil ont été enregistrée avec succès !"
+                );
+                return $this->redirectToRoute('app_home');
+            }
             $this->addFlash(
-                MessageConstant::SUCCESS_TYPE,
-                "Les données du profil ont été enregistrée avec succès !"
+                MessageConstant::ERROR_TYPE,
+                "Il y a un probleme pendant la modification ! Veuiller reessayer !"
             );
+            return $this->redirectToRoute('app_home');
         }
         return $this->render('account/profile.html.twig', [
             'form' => $form->createView()

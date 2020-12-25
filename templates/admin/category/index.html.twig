@@ -6,10 +6,12 @@
 {% block body %}
 	{% if app.request.attributes.get('_route') == 'admin_category_index' %}
 		<div class="container-fluid">
+			{% include "admin/partials/message.html.twig" %}
 			<h2 class="text-center">Gestion des catégories
 				<span>
 					<a href="{{ path('admin_category_new') }}" class="btn btn-success">
-						<i class="fa fa-plus"> Ajouter</i>
+						<i class="fa fa-plus">
+							Ajouter</i>
 					</a>
 				</span>
 			</h2>
@@ -54,4 +56,3 @@
 	{{ parent() }}
 	<script src="{{ asset('js/delete.js') }}"></script>
 {% endblock %}
-

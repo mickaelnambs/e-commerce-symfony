@@ -1,21 +1,24 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Gestion des produits!{% endblock %}
+{% block title %}Gestion des produits!
+{% endblock %}
 
 {% block body %}
 	{% if app.request.attributes.get('_route') == 'admin_product_index' %}
 		<div class="container-fluid">
+			{% include "admin/partials/message.html.twig" %}
 			<h2 class="text-center">Gestion des produits
 				<span>
 					<a href="{{ path('admin_product_new') }}" class="btn btn-success">
-						<i class="fa fa-plus"> Ajouter</i>
+						<i class="fa fa-plus">
+							Ajouter</i>
 					</a>
 				</span>
 			</h2>
 			<table class="table table-hover table-bordered">
 				<thead>
 					<tr class="text-center">
-                        <th></th>
+						<th></th>
 						<th>Catégorie</th>
 						<th>Marque</th>
 						<th>Prix</th>
@@ -34,16 +37,21 @@
 							{% endfor %}
 							<td>{{product.category.title}}</td>
 							<td>{{ product.mark }}</td>
-                            <td>{{ product.price | number_format(0, '', ' ') }} Ar</td>
-                            <td>
+							<td>{{ product.price | number_format(0, '', ' ') }}
+								Ar</td>
+							<td>
 								<img src="{{asset('uploads/' ~ product.author.image)}}" class="avatar-mini">
 							</td>
 							<td>{{ product.createdAt | date('d/m/Y à H:i') }}</td>
 							<td>
 								{% if product.isModified == true %}
-									<a href="{{ path('admin_product_index') }}" class="btn btn-success"><i class="fa fa-check"></i></a>
+									<a href="{{ path('admin_product_index') }}" class="btn btn-success">
+										<i class="fa fa-check"></i>
+									</a>
 								{% else %}
-									<a href="{{ path('admin_product_index') }}" class="btn btn-light"><i class="fa fa-check text-white"></i></a>
+									<a href="{{ path('admin_product_index') }}" class="btn btn-light">
+										<i class="fa fa-check text-white"></i>
+									</a>
 								{% endif %}
 								<a href="{{ path('admin_product_edit', {'id': product.id}) }}" class="btn btn-primary">
 									<i class="fa fa-edit"></i>
@@ -56,7 +64,7 @@
 					{% endfor %}
 				</tbody>
 			</table>
-            {{ pagination.display() }}
+			{{ pagination.display() }}
 		</div>
 	{% endif %}
 {% endblock %}
@@ -64,4 +72,3 @@
 	{{ parent() }}
 	<script src="{{ asset('js/delete.js') }}"></script>
 {% endblock %}
-
