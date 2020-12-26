@@ -2,11 +2,11 @@
 
 namespace App\Controller\Back;
 
-use App\Constant\MessageConstant;
 use App\Entity\User;
 use App\Form\EditUserType;
 use App\Constant\PageConstant;
 use App\Form\RegistrationType;
+use App\Constant\MessageConstant;
 use App\Controller\BaseController;
 use App\Repository\UserRepository;
 use App\Service\PaginationService;

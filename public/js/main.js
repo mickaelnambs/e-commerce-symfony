@@ -16,6 +16,8 @@ $(document).ready(function ($) {
 
 	$('#contactButton').click(function () {
 		$('#contactForm').slideToggle();
+		$('#contactButton').hide();
+		$('#addToCart').hide();
 	});
 
 	// Dropdown menu.

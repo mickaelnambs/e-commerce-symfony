@@ -21,6 +21,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
 
 /**
  * Class ProductController.
@@ -76,17 +78,45 @@ class ProductController extends BaseController
     }
 
     /**
-     * Affiche le detail d'un produit.
+     * Permet d'afficher le detail d'un produit et aussi faire l'envoi d'email.
      * 
      * @Route("/{slug}-{id}", name="product_show", methods={"POST","GET"}, requirements={"slug": "[a-z0-9\-]*"})
      *
      * @param Product $product
+     * @param Request $request
+     * @param MailerInterface $mailer
      * @param string $slug
      * 
      * @return Response
      */
-    public function show(Product $product, string $slug): Response
+    public function show(Product $product, Request $request, MailerInterface $mailer, string $slug): Response
     {
+        $contact = new Contact();
+        $form = $this->createForm(ContactType::class, $contact);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = (new TemplatedEmail())
+                ->from($contact->getEmail())
+                ->to($product->getAuthor()->getEmail())
+                ->subject("Contact au sujet de votre produit " . $product->getMark() . "!")
+                ->htmlTemplate('email/contact_product.html.twig')
+                ->context([
+                    'product' => $product,
+                    'mail' => $contact->getEmail(),
+                    'message' => $contact->getMessage()
+                ]);
+            $mailer->send($email);
+            $this->addFlash(
+                MessageConstant::SUCCESS_TYPE,
+                "Votre email a bien été envoyé !"
+            );
+            return $this->redirectToRoute('product_show', [
+                'slug' => $product->getSlug(),
+                'id' => $product->getId()
+            ]);
+        }
+
         if ($product->getSlug() !== $slug) {
             return $this->redirectToRoute('product_show', [
                 'slug' => $product->getSlug(),
@@ -94,6 +124,7 @@ class ProductController extends BaseController
             ]);
         }
         return $this->render('product/show.html.twig', [
+            'form' => $form->createView(),
             'product' => $product,
         ]);
     }

@@ -6,6 +6,7 @@
 	{% if app.request.attributes.get('_route') == 'product_show' %}
 		<div class="jumbotron bg-white">
 			<div class="container">
+				{% include "partials/_message.html.twig" %}
 				<div class="row">
 					<div class="col-md-8">
 						{% for product in product.images %}
@@ -17,7 +18,21 @@
 							{{ product.mark }}</h1>
 						<div class="text-secondary" style="font-size: 2rem; font-weight: bold;">{{ product.price | number_format(0, '', ' ') }}Ar</div>
 						{% if app.user %}
-							<a href="{{ path('product_cart_add', {id: product.id}) }}" add-to-cart class="btn btn-black mr-1 rounded-0">Ajouter</a>
+							<div id="contactForm" class="mt-4">
+								{{ form_start(form) }}
+								<div class="row">
+									<div class="col">{{ form_row(form.phone) }}</div>
+									<div class="col">{{ form_row(form.email) }}</div>
+								</div>
+								{{ form_rest(form) }}
+								<div class="form-group">
+									<button class="btn btn-black mr-1 rounded-0">Envoyer</button>
+								</div>
+								{{ form_end(form) }}
+
+							</div>
+							<a href="#" class="btn btn-black mr-1 rounded-0" id="contactButton">Contacter</a>
+							<a href="{{ path('product_cart_add', {id: product.id}) }}" add-to-cart class="btn btn-black mr-1 rounded-0" id="addToCart">Ajouter</a>
 						{% endif %}
 					</div>
 				</div>
